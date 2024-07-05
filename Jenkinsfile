@@ -15,12 +15,22 @@ pipeline {
             }
 
         }
-        stage ('Build') {
+        stage('npm-build') {
+            agent {
+                docker {
+                image 'node:7.4'
+                  }
+             }
+
             steps {
-                sh 'npm run server'
+                echo "Branch is ${env.BRANCH_NAME}..."
+
+                withNPM(npmrcConfig:'my-custom-npmrc') {
+                    echo "Performing npm build..."
+                    sh 'npm install'
+                }
             }
         }
-
 
         stage ('start') {
             steps {
