@@ -1,14 +1,34 @@
 
 pipeline {
-    agent any
+    agent 
+    {
+        label 'nodejs'
+    }
     
+    tools{
+        nodejs 'nodejs'
+
+    }
+
     stages {
-        stage ('Build') {
+        stage ('checkout') {
             steps {
-            sh 'npm install'
+               git 'https://github.com/Amuturia/gallery.git'
             }
         
         }
+        stage ('install dependancies') {
+            steps {
+                sh 'npm install'
+            }
+
+        }
+        stage ('Build') {
+            steps {
+                sh 'npm run server'
+            }
+        }
+
 
         stage ('start') {
             steps {
