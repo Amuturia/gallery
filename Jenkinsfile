@@ -6,20 +6,10 @@ pipeline {
         stage ('checkout') {
             steps {
                git 'https://github.com/Amuturia/gallery.git'
-               //sh 'npm --version'
-               //sh 'npm install'
-               //sh 'npm test'
+              
             }
         
         }
-        stage ('start') {
-            steps {
-                sh 'node server'
-            }
-        }
-    }
-
-
   //Student email notification 
     post {  
          success {  
