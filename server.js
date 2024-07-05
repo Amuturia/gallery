@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const config = require('./_config');
-// const path = require('path'); changed
+// Restored to active this code snippet to create the static files
+const path = require('path');
 
 // Define routes
 let index = require('./routes/index');
