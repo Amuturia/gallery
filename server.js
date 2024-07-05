@@ -1,13 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const path = require('path');
+const config = require('./_config');
+// const path = require('path'); changed
 
 // Define routes
 let index = require('./routes/index');
 let image = require('./routes/image');
 
-// connecting the database
+// connecting the Mongo database
 let mongodb_url = 'mongodb://localhost:27017/';
 let dbName = 'darkroom';
 mongoose.connect(`${mongodb_url}${dbName}`,{ useNewUrlParser: true , useUnifiedTopology: true }, (err)=>{
@@ -39,7 +40,7 @@ app.use('/image', image);
 
 
 
- 
+ // Define the PORT and start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT,() =>{
     console.log(`Server is listening at http://localhost:${PORT}`)
