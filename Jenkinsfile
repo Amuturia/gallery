@@ -10,6 +10,7 @@ pipeline {
             }
         
         }
+    }
   //Student email notification 
     post {  
          success {  
