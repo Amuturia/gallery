@@ -2,10 +2,8 @@ pipeline {
     agent any
 
     tools {
-        //nodejs "NodeJS_14"
-        // the name of the nodejs installation = _14
-        gradle "gradle"
-        // the name of the gradle installation v= -6
+        nodejs "node"
+        // the tool is getting information from the nodejs global configuration (Dashboard>manage jenkins>tools>nodejs configuration)
     }
     
     stages {
@@ -19,19 +17,16 @@ pipeline {
         }
         stage ("Build") {
             steps {
-                sh 'gradle --version'
-                //sh 'gradle install'
-                sh 'gradle init'
-                sh 'gradle build'
-                //sh 'npm install'
-                //sh 'npm serve'
+                // To npm install at jenkins pipeline
+                sh 'npm install'
+               
             }
             
         }
         stage ("Test") {
             steps {
-                sh 'gradle test'
-                //Step runs the steps in test folder
+                //To run the test in jenkinsfile
+               sh 'npm test'
             }
         }
         
