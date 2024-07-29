@@ -2,7 +2,7 @@ pipeline {
     agent any
 
        environment {
-        SLACK_CHANNEL = '#general'
+        SLACK_CHANNEL = 'antony_ip-1'
         SLACK_CREDENTIALS = 'slack-webhook' // replace with your actual Slack credentials ID
     }
 
