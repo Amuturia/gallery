@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+       environment {
+        SLACK_CHANNEL = '#general'
+        SLACK_CREDENTIALS = 'slack-webhook' // replace with your actual Slack credentials ID
+    }
+
     tools {
         nodejs "node"
         // the tool is getting information from the nodejs global configuration (Dashboard>manage jenkins>tools>nodejs configuration)
@@ -29,26 +34,48 @@ pipeline {
                sh 'npm test'
             }
         }
+        stage ("Run") {
+            steps {
+                //Now to add a step to run the website
+                sh 'node server'
+            }
+        }
         
     }
       //Student email notification 
     post {  
          success {  
-                mail bcc: '', 
-	        	body: 'This has been a successfull pipeline deploy', 
-		        subject: 'Successful Deploy', 
+              slackSend(
+                channel: env.SLACK_CHANNEL,
+                color: 'good',
+                message: "Build Success: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})",
+                tokenCredentialId: env.SLACK_CREDENTIALS
+            )
+            mail bcc: '', 
+                body: "<b>Pipeline Successfull!</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL of the build: ${env.BUILD_URL}", 
+                cc: '', charset: 'UTF-8', 
+                from: '', 
+                mimeType: 'text/html', 
+                replyTo: '', 
+		        subject: 'Successful Deploy!', 
 		        to: 'antony.muturia@student.moringaschool.com';
          } 
 
          failure {  
+            slackSend(
+                channel: env.SLACK_CHANNEL,
+                color: 'danger',
+                message: "Build Failed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})",
+                tokenCredentialId: env.SLACK_CREDENTIALS
+            )
              mail bcc: '', 
-             body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", 
-             cc: '', charset: 'UTF-8', 
-             from: '', 
-             mimeType: 'text/html', 
-             replyTo: '', 
-             subject: "ERROR CI: Project name -> ${env.JOB_NAME}", 
-             to: "antony.muturia@student.moringaschool.com";  
+                body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL of the build: ${env.BUILD_URL}", 
+                cc: '', charset: 'UTF-8', 
+                from: '', 
+                mimeType: 'text/html', 
+                replyTo: '', 
+                subject: "ERROR CI: Project name -> ${env.JOB_NAME}", 
+                to: "antony.muturia@student.moringaschool.com";  
          }  
          
     }
